@@ -16,7 +16,7 @@ class RebalancingEngine:
             "region_code": "1168000000"
         }
 
-    def generate_report(self, current_assets: List[Dict], monthly_income: float = 3500000, monthly_expense: float = 3200000) -> Dict:
+    def generate_report(self, current_assets: List[Dict], monthly_income: float = 3500000, monthly_expense: float = 3200000, family_count: int = 1, family_ages: List[int] = None, retirement_goal: str = None) -> Dict:
         """
         Build one report from actual user inputs.
         """
@@ -24,6 +24,7 @@ class RebalancingEngine:
         health_score = ai.calculate_health_score(current_assets)
         total_val = sum(a['current_value'] for a in current_assets)
         total_debt = sum(a.get('debt_amount', 0) for a in current_assets)
+        asset_breakdown = self._build_asset_breakdown(current_assets, total_val)
         market_trend = ai.predict_real_estate_trend(self.user_profile["region_code"])
         target_allocation = ai.optimize_portfolio()
         sim = RetirementSimulator(total_val, monthly_income, monthly_expense)
@@ -39,8 +40,23 @@ class RebalancingEngine:
                 "market_view": market_trend["trend"],
                 "monthly_income": monthly_income,
                 "monthly_expense": monthly_expense,
-                "monthly_cashflow": monthly_income - monthly_expense
+                "monthly_cashflow": monthly_income - monthly_expense,
+                "family_count": family_count,
+                "family_ages": family_ages or [],
+                "retirement_goal": retirement_goal,
+                "asset_breakdown": asset_breakdown
             },
+            "analysis_report": self._build_analysis_report(
+                health_score,
+                total_val,
+                total_debt,
+                monthly_income,
+                monthly_expense,
+                family_count,
+                family_ages or [],
+                retirement_goal,
+                asset_breakdown
+            ),
             "recommendation": {
                 "target_allocation": target_allocation,
                 "action_plan": action_plan
@@ -49,7 +65,59 @@ class RebalancingEngine:
         }
 
     def _is_real_estate(self, asset_type: str) -> bool:
-        return asset_type in ["real_estate", "부동산", "遺?숈궛"]
+        return asset_type in ["real_estate", "부동산"]
+
+    def _build_asset_breakdown(self, current: List[Dict], total: float) -> Dict:
+        labels = {
+            "real_estate": "부동산",
+            "deposit": "예금",
+            "stock": "주식",
+            "gold_silver": "금/은",
+            "pension": "연금",
+            "finance": "금융자산",
+            "cash": "현금"
+        }
+        breakdown = {}
+        for asset in current:
+            key = asset.get("asset_type", "etc")
+            label = labels.get(key, key)
+            value = asset.get("current_value", 0)
+            if label not in breakdown:
+                breakdown[label] = {"value": 0, "ratio": 0}
+            breakdown[label]["value"] += value
+
+        for label in breakdown:
+            breakdown[label]["ratio"] = round(breakdown[label]["value"] / total * 100, 1) if total else 0
+        return breakdown
+
+    def _build_analysis_report(self, score: int, total: float, debt: float, monthly_income: float, monthly_expense: float, family_count: int, family_ages: List[int], retirement_goal: str, asset_breakdown: Dict) -> Dict:
+        cashflow = monthly_income - monthly_expense
+        debt_ratio = debt / total if total else 0
+        largest_asset = max(asset_breakdown.items(), key=lambda item: item[1]["value"])[0] if asset_breakdown else "없음"
+        family_note = f"{family_count}명 가족"
+        if family_ages:
+            family_note += f" / 나이 {', '.join(str(age) for age in family_ages)}"
+
+        risk_flags = []
+        if debt_ratio > 0.4:
+            risk_flags.append("대출 비중이 높습니다.")
+        if cashflow < 0:
+            risk_flags.append("월 지출이 월수입보다 큽니다.")
+        if asset_breakdown.get("부동산", {}).get("ratio", 0) > 70:
+            risk_flags.append("부동산 집중도가 높습니다.")
+        if not risk_flags:
+            risk_flags.append("현재 입력 기준의 핵심 위험은 관리 가능한 수준입니다.")
+
+        return {
+            "headline": "입력한 자산/수입/지출 기준 맞춤 분석보고서",
+            "status": "주의" if score < 70 else "양호",
+            "asset_comment": f"총자산은 {total:,.0f}원이며, 가장 큰 비중은 {largest_asset}입니다.",
+            "cashflow_comment": f"월수입 {monthly_income:,.0f}원, 월지출 {monthly_expense:,.0f}원, 월 현금흐름 {cashflow:,.0f}원입니다.",
+            "debt_comment": f"대출잔액은 {debt:,.0f}원이고 총자산 대비 {debt_ratio*100:.1f}%입니다.",
+            "family_comment": family_note,
+            "retirement_goal_comment": retirement_goal or "은퇴목표가 입력되지 않았습니다.",
+            "risk_flags": risk_flags
+        }
 
     def _create_action_plan(self, current: List[Dict], target: Dict, total: float, monthly_income: float, monthly_expense: float) -> List[str]:
         plan = []

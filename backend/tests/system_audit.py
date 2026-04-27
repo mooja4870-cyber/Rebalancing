@@ -62,22 +62,38 @@ def run_input_analysis_flow():
         "age": 60,
         "monthly_income": 4000000,
         "monthly_expense": 3200000,
+        "loan_balance": 300000000,
+        "loan_interest_rate": 4.5,
+        "family_count": 3,
+        "family_ages": [60, 58, 28],
+        "retirement_goal": "monthly cashflow 4m KRW",
         "risk_tolerance": 5,
         "financial_goal": "retirement cashflow",
         "assets": [
             {
                 "asset_type": "real_estate",
                 "asset_name": "apartment",
-                "current_value": 1600000000,
-                "debt_amount": 300000000,
-                "debt_interest_rate": 4.5
+                "current_value": 1600000000
             },
             {
-                "asset_type": "finance",
-                "asset_name": "deposit and ETF",
-                "current_value": 200000000,
-                "debt_amount": 0,
-                "debt_interest_rate": 0
+                "asset_type": "deposit",
+                "asset_name": "deposit",
+                "current_value": 120000000
+            },
+            {
+                "asset_type": "stock",
+                "asset_name": "stock",
+                "current_value": 60000000
+            },
+            {
+                "asset_type": "gold_silver",
+                "asset_name": "gold and silver",
+                "current_value": 20000000
+            },
+            {
+                "asset_type": "pension",
+                "asset_name": "pension",
+                "current_value": 180000000
             }
         ]
     }
@@ -97,6 +113,15 @@ def run_input_analysis_flow():
             return False
         if summary.get("total_debt") != 300000000:
             print("  - Debt Binding: [FAIL]")
+            return False
+        if summary.get("family_count") != payload["family_count"]:
+            print("  - Family Binding: [FAIL]")
+            return False
+        if summary.get("retirement_goal") != payload["retirement_goal"]:
+            print("  - Retirement Goal Binding: [FAIL]")
+            return False
+        if "analysis_report" not in data:
+            print("  - Analysis Report: [FAIL]")
             return False
         if "simulation" not in data:
             print("  - Simulation Result: [FAIL]")

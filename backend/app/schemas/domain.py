@@ -40,11 +40,16 @@ class AnalysisAssetInput(AssetBase):
 
 class AnalysisInputRequest(BaseModel):
     user_id: Optional[str] = None
-    name: str = "사용자"
+    name: str = "User"
     age: int = Field(40, ge=19, le=100)
     region_code: str = "1168000000"
     monthly_income: float = Field(0.0, ge=0)
     monthly_expense: float = Field(0.0, ge=0)
+    loan_balance: float = Field(0.0, ge=0)
+    loan_interest_rate: float = Field(0.0, ge=0)
+    family_count: int = Field(1, ge=1, le=20)
+    family_ages: List[int] = Field(default_factory=list)
+    retirement_goal: str = "Stable retirement cashflow"
     risk_tolerance: int = Field(5, ge=1, le=10)
     financial_goal: Optional[str] = None
     assets: List[AnalysisAssetInput]

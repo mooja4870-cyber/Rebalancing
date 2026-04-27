@@ -132,10 +132,17 @@ def save_analysis_input(payload: schemas.AnalysisInputRequest, db: Session = Dep
     financial.monthly_income = payload.monthly_income
     financial.monthly_expense = payload.monthly_expense
     financial.risk_tolerance = payload.risk_tolerance
-    financial.financial_goal = payload.financial_goal
+    financial.financial_goal = payload.retirement_goal or payload.financial_goal
 
     db.query(models.UserAsset).filter(models.UserAsset.user_id == uid).delete()
-    for asset in payload.assets:
+    debt_attached = False
+    for index, asset in enumerate(payload.assets):
+        debt_amount = asset.debt_amount
+        debt_interest_rate = asset.debt_interest_rate
+        if payload.loan_balance and not debt_attached and (asset.asset_type == "real_estate" or index == 0):
+            debt_amount = payload.loan_balance
+            debt_interest_rate = payload.loan_interest_rate
+            debt_attached = True
         db.add(models.UserAsset(
             user_id=uid,
             asset_type=asset.asset_type,
@@ -143,12 +150,32 @@ def save_analysis_input(payload: schemas.AnalysisInputRequest, db: Session = Dep
             asset_name=asset.asset_name,
             region_code=asset.region_code or payload.region_code,
             current_value=asset.current_value,
-            debt_amount=asset.debt_amount,
-            debt_interest_rate=asset.debt_interest_rate
+            debt_amount=debt_amount,
+            debt_interest_rate=debt_interest_rate
         ))
 
     db.commit()
-    return _build_recommendation(uid, db, allow_sample=False)
+    report = _build_recommendation(uid, db, allow_sample=False)
+    report["summary"]["family_count"] = payload.family_count
+    report["summary"]["family_ages"] = payload.family_ages
+    report["summary"]["retirement_goal"] = payload.retirement_goal
+    engine = RebalancingEngine(uid, db, {
+        "life_stage": _estimate_life_stage(payload.age),
+        "risk_tolerance": payload.risk_tolerance,
+        "region_code": payload.region_code
+    })
+    current_assets = _asset_rows_to_dicts(db.query(models.UserAsset).filter(models.UserAsset.user_id == uid).all())
+    report = engine.generate_report(
+        current_assets,
+        payload.monthly_income,
+        payload.monthly_expense,
+        payload.family_count,
+        payload.family_ages,
+        payload.retirement_goal
+    )
+    report["source"] = "user_input"
+    report["user_id"] = uid
+    return report
 
 @app.post("/api/v1/users/sample")
 def create_sample_user(db: Session = Depends(get_db)):

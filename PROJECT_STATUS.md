@@ -1,6 +1,6 @@
 # PROJECT_STATUS
 
-Last updated: 2026-04-27 09:55:44
+Last updated: 2026-04-27 10:06:29
 
 ## Current State
 
@@ -11,6 +11,8 @@ Last updated: 2026-04-27 09:55:44
 - GitHub remote `origin` is set to `https://github.com/mooja4870-cyber/Rebalancing.git`.
 - Preparing first project source push while excluding generated cache/dependency files.
 - Added real user input analysis MVP: profile/cashflow/assets save API, DB financial snapshot table, personalized orchestration, input screen, and harness coverage.
+- Required input report fields now appear in the asset input flow: real estate, deposits, stocks, gold/silver, pension, loan balance, loan interest rate, monthly income, monthly expense, family count/ages, and retirement goal.
+- Analysis API now returns an `analysis_report` with asset, cashflow, debt, family, retirement goal, risk flags, simulation, and action plan sections.
 - Current local server is running on `http://localhost:8000/`.
 - Verification passed with `python backend/tests/system_audit.py`.
 
