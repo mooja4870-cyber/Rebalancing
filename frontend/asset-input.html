@@ -112,16 +112,16 @@
             <h3 class="section-title">수입/지출/대출</h3>
             <div class="field">
                 <label for="monthly_income">월수입 <span class="required">*</span></label>
-                <input id="monthly_income" name="monthly_income" type="number" min="0" value="4000000" required>
-                <small>세후 기준 월평균 금액을 원 단위로 입력합니다.</small>
+                <input id="monthly_income" name="monthly_income" inputmode="decimal" value="4,000,000.0" required>
+                <small>세후 기준 월평균 금액을 `#,###,###.#` 형식으로 입력합니다.</small>
             </div>
             <div class="field">
                 <label for="monthly_expense">월지출 <span class="required">*</span></label>
-                <input id="monthly_expense" name="monthly_expense" type="number" min="0" value="3200000" required>
+                <input id="monthly_expense" name="monthly_expense" inputmode="decimal" value="3,200,000.0" required>
             </div>
             <div class="field">
                 <label for="loan_balance">대출잔액 <span class="required">*</span></label>
-                <input id="loan_balance" name="loan_balance" type="number" min="0" value="300000000" required>
+                <input id="loan_balance" name="loan_balance" inputmode="decimal" value="300,000,000.0" required>
             </div>
             <div class="field">
                 <label for="loan_interest_rate">대출금리(연 %) <span class="required">*</span></label>
@@ -136,23 +136,23 @@
             <h3 class="section-title">자산 현황</h3>
             <div class="field">
                 <label for="real_estate">부동산 <span class="required">*</span></label>
-                <input id="real_estate" name="real_estate" type="number" min="0" value="1600000000" required>
+                <input id="real_estate" name="real_estate" inputmode="decimal" value="1,600,000,000.0" required>
             </div>
             <div class="field">
                 <label for="deposit">예금 <span class="required">*</span></label>
-                <input id="deposit" name="deposit" type="number" min="0" value="120000000" required>
+                <input id="deposit" name="deposit" inputmode="decimal" value="120,000,000.0" required>
             </div>
             <div class="field">
                 <label for="stock">주식 <span class="required">*</span></label>
-                <input id="stock" name="stock" type="number" min="0" value="60000000" required>
+                <input id="stock" name="stock" inputmode="decimal" value="60,000,000.0" required>
             </div>
             <div class="field">
                 <label for="gold_silver">금/은 <span class="required">*</span></label>
-                <input id="gold_silver" name="gold_silver" type="number" min="0" value="20000000" required>
+                <input id="gold_silver" name="gold_silver" inputmode="decimal" value="20,000,000.0" required>
             </div>
             <div class="field">
                 <label for="pension">연금 <span class="required">*</span></label>
-                <input id="pension" name="pension" type="number" min="0" value="180000000" required>
+                <input id="pension" name="pension" inputmode="decimal" value="180,000,000.0" required>
             </div>
 
             <button class="submit-button" type="submit">분석보고서 만들기</button>
@@ -176,8 +176,13 @@
         const resultCard = document.getElementById('resultCard');
         const resultBody = document.getElementById('resultBody');
 
+        const decimalFormatter = new Intl.NumberFormat('en-US', {
+            minimumFractionDigits: 1,
+            maximumFractionDigits: 1
+        });
+
         function numberOf(formData, key) {
-            return Number(formData.get(key) || 0);
+            return Number(String(formData.get(key) || 0).replace(/,/g, ''));
         }
 
         function agesOf(value) {
@@ -185,7 +190,21 @@
         }
 
         function won(value) {
-            return `${Math.round(value || 0).toLocaleString()}원`;
+            return `${decimalFormatter.format(Number(value || 0))}원`;
+        }
+
+        document.querySelectorAll('input[inputmode="decimal"]').forEach((input) => {
+            input.addEventListener('blur', () => {
+                const value = Number(String(input.value || 0).replace(/,/g, ''));
+                input.value = Number.isFinite(value) ? decimalFormatter.format(value) : '0.0';
+            });
+            input.addEventListener('focus', () => {
+                input.select();
+            });
+        });
+
+        function pct(value) {
+            return `${decimalFormatter.format(Number(value || 0))}%`;
         }
 
         form.addEventListener('submit', async (event) => {
@@ -238,7 +257,7 @@
             const summary = report.summary;
             const analysis = report.analysis_report;
             const simulation = report.simulation;
-            const breakdown = Object.entries(summary.asset_breakdown).map(([label, item]) => `<li>${label}: ${won(item.value)} (${item.ratio}%)</li>`).join('');
+            const breakdown = Object.entries(summary.asset_breakdown).map(([label, item]) => `<li>${label}: ${won(item.value)} (${pct(item.ratio)})</li>`).join('');
             const risks = analysis.risk_flags.map((item) => `<li>${item}</li>`).join('');
             const plan = report.recommendation.action_plan.map((item) => `<li>${item}</li>`).join('');
             resultBody.innerHTML = `
@@ -250,7 +269,7 @@
                 <p>${analysis.debt_comment}</p>
                 <p><b>가족</b>: ${analysis.family_comment}</p>
                 <p><b>은퇴목표</b>: ${analysis.retirement_goal_comment}</p>
-                <p><b>30년 자산 생존확률</b>: ${simulation.survival_probability.toFixed(1)}%</p>
+                <p><b>30년 자산 생존확률</b>: ${pct(simulation.survival_probability)}</p>
                 <p style="margin-top: 10px;"><b>위험 체크</b></p>
                 <ul class="report-list">${risks}</ul>
                 <p><b>실행 제안</b></p>

@@ -1,6 +1,6 @@
 # PROJECT_STATUS
 
-Last updated: 2026-04-27 10:13:40
+Last updated: 2026-04-27 10:25:02
 
 ## Current State
 
@@ -14,6 +14,7 @@ Last updated: 2026-04-27 10:13:40
 - Required input report fields now appear in the asset input flow: real estate, deposits, stocks, gold/silver, pension, loan balance, loan interest rate, monthly income, monthly expense, family count/ages, and retirement goal.
 - Analysis API now returns an `analysis_report` with asset, cashflow, debt, family, retirement goal, risk flags, simulation, and action plan sections.
 - Asset input UX fixed: every required field has a visible label, helper text where needed, required markers, mobile-friendly spacing, visible submit button, family age count validation, and auto-scroll to report/errors.
+- Numeric display format updated to `#,###,###.#` for money/percent report values and money input defaults.
 - Current local server is running on `http://localhost:8000/`.
 - Verification passed with `python backend/tests/system_audit.py`.
 

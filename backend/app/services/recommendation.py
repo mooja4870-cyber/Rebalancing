@@ -90,6 +90,12 @@ class RebalancingEngine:
             breakdown[label]["ratio"] = round(breakdown[label]["value"] / total * 100, 1) if total else 0
         return breakdown
 
+    def _fmt_number(self, value: float) -> str:
+        return f"{value:,.1f}"
+
+    def _fmt_won(self, value: float) -> str:
+        return f"{self._fmt_number(value)}원"
+
     def _build_analysis_report(self, score: int, total: float, debt: float, monthly_income: float, monthly_expense: float, family_count: int, family_ages: List[int], retirement_goal: str, asset_breakdown: Dict) -> Dict:
         cashflow = monthly_income - monthly_expense
         debt_ratio = debt / total if total else 0
@@ -111,9 +117,9 @@ class RebalancingEngine:
         return {
             "headline": "입력한 자산/수입/지출 기준 맞춤 분석보고서",
             "status": "주의" if score < 70 else "양호",
-            "asset_comment": f"총자산은 {total:,.0f}원이며, 가장 큰 비중은 {largest_asset}입니다.",
-            "cashflow_comment": f"월수입 {monthly_income:,.0f}원, 월지출 {monthly_expense:,.0f}원, 월 현금흐름 {cashflow:,.0f}원입니다.",
-            "debt_comment": f"대출잔액은 {debt:,.0f}원이고 총자산 대비 {debt_ratio*100:.1f}%입니다.",
+            "asset_comment": f"총자산은 {self._fmt_won(total)}이며, 가장 큰 비중은 {largest_asset}입니다.",
+            "cashflow_comment": f"월수입 {self._fmt_won(monthly_income)}, 월지출 {self._fmt_won(monthly_expense)}, 월 현금흐름 {self._fmt_won(cashflow)}입니다.",
+            "debt_comment": f"대출잔액은 {self._fmt_won(debt)}이고 총자산 대비 {self._fmt_number(debt_ratio*100)}%입니다.",
             "family_comment": family_note,
             "retirement_goal_comment": retirement_goal or "은퇴목표가 입력되지 않았습니다.",
             "risk_flags": risk_flags
@@ -127,7 +133,7 @@ class RebalancingEngine:
         current_re = sum(a['current_value'] for a in current if self._is_real_estate(a['asset_type'])) / total
         if current_re > target["real_estate"]:
             excess = (current_re - target["real_estate"]) * total
-            plan.append(f"Reduce real estate concentration by about {excess/100000000:.1f}eok KRW over time.")
+            plan.append(f"Reduce real estate concentration by about {self._fmt_won(excess)} over time.")
         
         high_interest_debts = [a for a in current if a.get('debt_interest_rate', 0) > 5.0]
         if high_interest_debts:
