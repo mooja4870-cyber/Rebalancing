@@ -6,100 +6,20 @@
     <title>자산/가족/수입/지출 현황 - 자산균형</title>
     <link rel="stylesheet" href="css/index.css">
     <style>
-        .input-page {
-            max-height: calc(100vh - 40px);
-            overflow-y: auto;
-            padding-bottom: 24px;
-        }
-
-        .form-section {
-            display: flex;
-            flex-direction: column;
-            gap: 14px;
-        }
-
-        .field {
-            display: flex;
-            flex-direction: column;
-            gap: 7px;
-        }
-
-        .field label {
-            font-size: 13px;
-            font-weight: 800;
-            color: var(--text-main);
-        }
-
-        .field small {
-            font-size: 11px;
-            color: var(--text-muted);
-            line-height: 1.4;
-        }
-
-        .field input {
-            width: 100%;
-            padding: 13px 14px;
-            border: 1px solid #E2E8F0;
-            border-radius: 12px;
-            font-size: 15px;
-            color: var(--text-main);
-            background: #fff;
-        }
-
-        .field input:focus {
-            outline: 2px solid rgba(37, 99, 235, 0.18);
-            border-color: var(--primary);
-        }
-
-        .required {
-            color: var(--danger);
-        }
-
-        .section-title {
-            font-size: 16px;
-            margin-top: 6px;
-        }
-
-        .submit-button {
-            border: 0;
-            background: var(--primary);
-            color: white;
-            padding: 15px;
-            border-radius: 12px;
-            font-weight: 800;
-            cursor: pointer;
-            font-size: 15px;
-        }
-
-        .report-list {
-            margin: 8px 0 8px 18px;
-        }
-
-        .button-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-        }
-
-        .secondary-button {
-            border: 1px solid #CBD5E1;
-            background: white;
-            color: var(--text-main);
-            padding: 15px;
-            border-radius: 12px;
-            font-weight: 800;
-            cursor: pointer;
-            font-size: 15px;
-        }
-
-        .save-status {
-            display: none;
-            font-size: 12px;
-            color: var(--secondary);
-            font-weight: 700;
-            text-align: center;
-        }
-
+        .input-page { max-height: calc(100vh - 40px); overflow-y: auto; padding-bottom: 24px; }
+        .form-section { display: flex; flex-direction: column; gap: 14px; }
+        .field { display: flex; flex-direction: column; gap: 7px; }
+        .field label { font-size: 13px; font-weight: 800; color: var(--text-main); }
+        .field small { font-size: 11px; color: var(--text-muted); line-height: 1.4; }
+        .field input, .field select { width: 100%; padding: 13px 14px; border: 1px solid #E2E8F0; border-radius: 12px; font-size: 15px; color: var(--text-main); background: #fff; }
+        .field input:focus, .field select:focus { outline: 2px solid rgba(37, 99, 235, 0.18); border-color: var(--primary); }
+        .required { color: var(--danger); }
+        .section-title { font-size: 16px; margin-top: 6px; }
+        .submit-button { border: 0; background: var(--primary); color: white; padding: 15px; border-radius: 12px; font-weight: 800; cursor: pointer; font-size: 15px; }
+        .secondary-button { border: 1px solid #CBD5E1; background: white; color: var(--text-main); padding: 15px; border-radius: 12px; font-weight: 800; cursor: pointer; font-size: 15px; }
+        .button-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .save-status { display: none; font-size: 12px; color: var(--secondary); font-weight: 700; text-align: center; }
+        .report-list { margin: 8px 0 8px 18px; }
     </style>
 </head>
 <body>
@@ -107,84 +27,50 @@
         <header>
             <div class="greeting">
                 <h1>자산/가족/수입/지출 현황</h1>
-                <p>항목명을 보고 하나씩 입력하면 맞춤 분석보고서를 만듭니다.</p>
+                <p>cogui 흐름에 맞춰 사용자 입력부터 개인화 리포트까지 생성합니다.</p>
             </div>
         </header>
 
         <form id="assetForm" class="glass-card form-section">
-            <h3 class="section-title">기본 정보</h3>
-            <div class="field">
-                <label for="name">이름 <span class="required">*</span></label>
-                <input id="name" name="name" value="홍길동" autocomplete="name" required>
-            </div>
-            <div class="field">
-                <label for="age">본인 나이 <span class="required">*</span></label>
-                <input id="age" name="age" type="number" min="19" max="100" value="60" required>
-            </div>
-            <div class="field">
-                <label for="family_count">가족수 <span class="required">*</span></label>
-                <input id="family_count" name="family_count" type="number" min="1" max="20" value="3" required>
-            </div>
-            <div class="field">
-                <label for="family_ages">가족 나이 <span class="required">*</span></label>
-                <input id="family_ages" name="family_ages" value="60,58,28" required>
-                <small>쉼표로 구분합니다. 예: 60,58,28</small>
-            </div>
-            <div class="field">
-                <label for="retirement_goal">은퇴목표 <span class="required">*</span></label>
-                <input id="retirement_goal" name="retirement_goal" value="월 400만원 현금흐름 유지" required>
-            </div>
+            <h3 class="section-title">기본정보</h3>
+            <div class="field"><label for="name">이름 <span class="required">*</span></label><input id="name" name="name" value="홍길동" autocomplete="name" required></div>
+            <div class="field"><label for="age">나이 <span class="required">*</span></label><input id="age" name="age" type="number" min="19" max="100" value="60" required></div>
+            <div class="field"><label for="gender">성별</label><select id="gender" name="gender"><option value="남성">남성</option><option value="여성">여성</option><option value="기타">기타</option></select></div>
+            <div class="field"><label for="residence_region">거주지역 <span class="required">*</span></label><select id="residence_region" name="residence_region" required><option value="강남구">강남구</option><option value="대구 수성구">대구 수성구</option><option value="세종시">세종시</option></select><small>현재는 cogui 샘플 지역부터 매핑합니다.</small></div>
+            <div class="field"><label for="job_category">직업군 <span class="required">*</span></label><input id="job_category" name="job_category" value="은퇴" required></div>
+            <div class="field"><label for="annual_income">연소득 <span class="required">*</span></label><input id="annual_income" name="annual_income" inputmode="decimal" value="72,000,000.0" required></div>
+            <div class="field"><label for="family_count">가족구성: 가족수 <span class="required">*</span></label><input id="family_count" name="family_count" type="number" min="1" max="20" value="2" required></div>
+            <div class="field"><label for="family_ages">가족구성: 가족 나이 <span class="required">*</span></label><input id="family_ages" name="family_ages" value="60,32" required><small>쉼표로 구분합니다. 예: 60,32</small></div>
 
-            <h3 class="section-title">수입/지출/대출</h3>
-            <div class="field">
-                <label for="monthly_income">월수입 <span class="required">*</span></label>
-                <input id="monthly_income" name="monthly_income" inputmode="decimal" value="4,000,000.0" required>
-                <small>세후 기준 월평균 금액을 `#,###,###.#` 형식으로 입력합니다.</small>
-            </div>
-            <div class="field">
-                <label for="monthly_expense">월지출 <span class="required">*</span></label>
-                <input id="monthly_expense" name="monthly_expense" inputmode="decimal" value="3,200,000.0" required>
-            </div>
-            <div class="field">
-                <label for="loan_balance">대출잔액 <span class="required">*</span></label>
-                <input id="loan_balance" name="loan_balance" inputmode="decimal" value="300,000,000.0" required>
-            </div>
-            <div class="field">
-                <label for="monthly_loan_interest">월 대출이자 <span class="required">*</span></label>
-                <input id="monthly_loan_interest" name="monthly_loan_interest" inputmode="decimal" value="1,125,000.0" required>
-            </div>
-            <div class="field">
-                <label for="risk_tolerance">위험성향(1~10) <span class="required">*</span></label>
-                <input id="risk_tolerance" name="risk_tolerance" type="number" min="1" max="10" value="5" required>
-                <small>1은 안정형, 10은 공격형입니다.</small>
-            </div>
+            <h3 class="section-title">부동산</h3>
+            <div class="field"><label for="real_estate_type">주택유형</label><select id="real_estate_type" name="real_estate_type"><option value="아파트">아파트</option><option value="단독">단독</option><option value="상가">상가</option><option value="기타">기타</option></select></div>
+            <div class="field"><label for="real_estate_count">보유수량</label><input id="real_estate_count" name="real_estate_count" type="number" min="0" value="1"></div>
+            <div class="field"><label for="real_estate_market_value">현재시세 <span class="required">*</span></label><input id="real_estate_market_value" name="real_estate_market_value" inputmode="decimal" value="2,900,000,000.0" required><small>실시간 API 연동 전에는 직접 입력값을 기준으로 분석합니다.</small></div>
+            <div class="field"><label for="loan_balance">대출정보: 대출잔액 <span class="required">*</span></label><input id="loan_balance" name="loan_balance" inputmode="decimal" value="600,000,000.0" required></div>
+            <div class="field"><label for="monthly_loan_interest">대출정보: 월 대출이자 <span class="required">*</span></label><input id="monthly_loan_interest" name="monthly_loan_interest" inputmode="decimal" value="2,250,000.0" required></div>
 
-            <h3 class="section-title">자산 현황</h3>
-            <div class="field">
-                <label for="real_estate">부동산 <span class="required">*</span></label>
-                <input id="real_estate" name="real_estate" inputmode="decimal" value="1,600,000,000.0" required>
-            </div>
-            <div class="field">
-                <label for="deposit">예금 <span class="required">*</span></label>
-                <input id="deposit" name="deposit" inputmode="decimal" value="120,000,000.0" required>
-            </div>
-            <div class="field">
-                <label for="stock">주식 <span class="required">*</span></label>
-                <input id="stock" name="stock" inputmode="decimal" value="60,000,000.0" required>
-            </div>
-            <div class="field">
-                <label for="gold_silver">금/은 <span class="required">*</span></label>
-                <input id="gold_silver" name="gold_silver" inputmode="decimal" value="20,000,000.0" required>
-            </div>
-            <div class="field">
-                <label for="crypto_asset">가상자산 <span class="required">*</span></label>
-                <input id="crypto_asset" name="crypto_asset" inputmode="decimal" value="180,000,000.0" required>
-            </div>
+            <h3 class="section-title">수입/지출</h3>
+            <div class="field"><label for="monthly_income">월수입 <span class="required">*</span></label><input id="monthly_income" name="monthly_income" inputmode="decimal" value="6,000,000.0" required></div>
+            <div class="field"><label for="monthly_expense">월지출 <span class="required">*</span></label><input id="monthly_expense" name="monthly_expense" inputmode="decimal" value="5,000,000.0" required></div>
+            <div class="field"><label for="risk_tolerance">위험성향(1~10) <span class="required">*</span></label><input id="risk_tolerance" name="risk_tolerance" type="number" min="1" max="10" value="5" required><small>1은 안정형, 10은 공격형입니다.</small></div>
 
-            <div class="button-row">
-                <button id="editButton" class="secondary-button" type="button">수정</button>
-                <button id="saveButton" class="submit-button" type="button">저장</button>
-            </div>
+            <h3 class="section-title">금융자산</h3>
+            <div class="field"><label for="deposit">예금 <span class="required">*</span></label><input id="deposit" name="deposit" inputmode="decimal" value="100,000,000.0" required></div>
+            <div class="field"><label for="installment_savings">적금</label><input id="installment_savings" name="installment_savings" inputmode="decimal" value="0.0"></div>
+            <div class="field"><label for="stock">주식 <span class="required">*</span></label><input id="stock" name="stock" inputmode="decimal" value="100,000,000.0" required></div>
+            <div class="field"><label for="fund">펀드</label><input id="fund" name="fund" inputmode="decimal" value="0.0"></div>
+            <div class="field"><label for="pension_insurance">연금/보험</label><input id="pension_insurance" name="pension_insurance" inputmode="decimal" value="0.0"></div>
+            <div class="field"><label for="gold_silver">금/은 <span class="required">*</span></label><input id="gold_silver" name="gold_silver" inputmode="decimal" value="70,000,000.0" required></div>
+            <div class="field"><label for="crypto_asset">가상자산 <span class="required">*</span></label><input id="crypto_asset" name="crypto_asset" inputmode="decimal" value="0.0" required></div>
+            <div class="field"><label for="other_assets">기타</label><input id="other_assets" name="other_assets" inputmode="decimal" value="0.0"></div>
+
+            <h3 class="section-title">재무목표</h3>
+            <div class="field"><label for="short_term_goal">단기 목표(1-3년)</label><input id="short_term_goal" name="short_term_goal" value="대출이자 부담 완화"></div>
+            <div class="field"><label for="mid_term_goal">중기 목표(3-10년)</label><input id="mid_term_goal" name="mid_term_goal" value="부동산 비중 축소와 금융자산 확대"></div>
+            <div class="field"><label for="long_term_goal">장기 목표(10년+)</label><input id="long_term_goal" name="long_term_goal" value="안정적 은퇴 현금흐름"></div>
+            <div class="field"><label for="retirement_goal">은퇴목표 <span class="required">*</span></label><input id="retirement_goal" name="retirement_goal" value="월 500만원 현금흐름 유지" required></div>
+
+            <div class="button-row"><button id="editButton" class="secondary-button" type="button">수정</button><button id="saveButton" class="submit-button" type="button">저장</button></div>
             <p id="saveStatus" class="save-status">저장되었습니다. 이제 분석보고서를 만들 수 있습니다.</p>
             <button id="analysisButton" class="submit-button" type="submit" style="display: none;">분석보고서 만들기</button>
         </form>
@@ -193,7 +79,6 @@
             <h3 style="font-size: 16px; margin-bottom: 12px;">분석보고서</h3>
             <div id="resultBody" style="font-size: 13px; line-height: 1.7;"></div>
         </div>
-
     </div>
 
     <script>
@@ -205,37 +90,20 @@
         const saveStatus = document.getElementById('saveStatus');
         const analysisButton = document.getElementById('analysisButton');
         const STORAGE_KEY = 'asset-balance:last-analysis-input';
+        const decimalFormatter = new Intl.NumberFormat('en-US', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
 
-        const decimalFormatter = new Intl.NumberFormat('en-US', {
-            minimumFractionDigits: 1,
-            maximumFractionDigits: 1
-        });
-
-        function numberOf(formData, key) {
-            return Number(String(formData.get(key) || 0).replace(/,/g, ''));
-        }
-
-        function agesOf(value) {
-            return String(value || '').split(',').map((age) => Number(age.trim())).filter((age) => age > 0);
-        }
-
-        function won(value) {
-            return `${decimalFormatter.format(Number(value || 0))}원`;
-        }
+        function numberOf(formData, key) { return Number(String(formData.get(key) || 0).replace(/,/g, '')); }
+        function agesOf(value) { return String(value || '').split(',').map((age) => Number(age.trim())).filter((age) => age > 0); }
+        function money(value) { return `${decimalFormatter.format(Number(value || 0))}원`; }
+        function pct(value) { return `${decimalFormatter.format(Number(value || 0))}%`; }
 
         document.querySelectorAll('input[inputmode="decimal"]').forEach((input) => {
             input.addEventListener('blur', () => {
                 const value = Number(String(input.value || 0).replace(/,/g, ''));
                 input.value = Number.isFinite(value) ? decimalFormatter.format(value) : '0.0';
             });
-            input.addEventListener('focus', () => {
-                input.select();
-            });
+            input.addEventListener('focus', () => input.select());
         });
-
-        function pct(value) {
-            return `${decimalFormatter.format(Number(value || 0))}%`;
-        }
 
         function setValue(name, value) {
             const input = form.elements[name];
@@ -247,26 +115,49 @@
             input.value = Array.isArray(value) ? value.join(',') : value;
         }
 
+        function loadStoredInput() {
+            try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); } catch (error) { return {}; }
+        }
+
+        function saveStoredInput(payload, userId) {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...payload, user_id: userId || payload.user_id }));
+        }
+
         function buildPayload(data, familyAges, familyCount) {
             const stored = loadStoredInput();
+            const realEstateValue = numberOf(data, 'real_estate_market_value');
             return {
                 user_id: stored.user_id || undefined,
                 name: data.get('name'),
                 age: numberOf(data, 'age'),
+                gender: data.get('gender'),
+                residence_region: data.get('residence_region'),
+                job_category: data.get('job_category'),
+                annual_income: numberOf(data, 'annual_income'),
                 monthly_income: numberOf(data, 'monthly_income'),
                 monthly_expense: numberOf(data, 'monthly_expense'),
                 loan_balance: numberOf(data, 'loan_balance'),
                 monthly_loan_interest: numberOf(data, 'monthly_loan_interest'),
                 family_count: familyCount,
                 family_ages: familyAges,
+                real_estate_type: data.get('real_estate_type'),
+                real_estate_count: numberOf(data, 'real_estate_count'),
+                real_estate_market_value: realEstateValue,
+                short_term_goal: data.get('short_term_goal'),
+                mid_term_goal: data.get('mid_term_goal'),
+                long_term_goal: data.get('long_term_goal'),
                 retirement_goal: data.get('retirement_goal'),
                 risk_tolerance: numberOf(data, 'risk_tolerance'),
                 assets: [
-                    {asset_type: 'real_estate', asset_name: '부동산', current_value: numberOf(data, 'real_estate')},
+                    {asset_type: 'real_estate', asset_name: data.get('real_estate_type') || '부동산', current_value: realEstateValue},
                     {asset_type: 'deposit', asset_name: '예금', current_value: numberOf(data, 'deposit')},
+                    {asset_type: 'installment_savings', asset_name: '적금', current_value: numberOf(data, 'installment_savings')},
                     {asset_type: 'stock', asset_name: '주식', current_value: numberOf(data, 'stock')},
+                    {asset_type: 'fund', asset_name: '펀드', current_value: numberOf(data, 'fund')},
+                    {asset_type: 'pension_insurance', asset_name: '연금/보험', current_value: numberOf(data, 'pension_insurance')},
                     {asset_type: 'gold_silver', asset_name: '금/은', current_value: numberOf(data, 'gold_silver')},
-                    {asset_type: 'crypto_asset', asset_name: '가상자산', current_value: numberOf(data, 'crypto_asset')}
+                    {asset_type: 'crypto_asset', asset_name: '가상자산', current_value: numberOf(data, 'crypto_asset')},
+                    {asset_type: 'other_assets', asset_name: '기타', current_value: numberOf(data, 'other_assets')}
                 ]
             };
         }
@@ -275,18 +166,13 @@
             const data = new FormData(form);
             const familyAges = agesOf(data.get('family_ages'));
             const familyCount = numberOf(data, 'family_count');
-
-            if (!form.reportValidity()) {
-                return null;
-            }
-
+            if (!form.reportValidity()) return null;
             if (familyAges.length !== familyCount) {
                 resultBody.textContent = `가족수는 ${familyCount}명인데 가족 나이는 ${familyAges.length}개입니다. 가족 나이를 가족수만큼 입력해 주세요.`;
                 resultCard.style.display = 'block';
                 resultCard.scrollIntoView({behavior: 'smooth', block: 'start'});
                 return null;
             }
-
             return buildPayload(data, familyAges, familyCount);
         }
 
@@ -295,57 +181,21 @@
             analysisButton.style.display = isSaved ? 'block' : 'none';
         }
 
-        function loadStoredInput() {
-            try {
-                return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
-            } catch (error) {
-                return {};
-            }
-        }
-
-        function saveStoredInput(payload, userId) {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify({
-                ...payload,
-                user_id: userId || payload.user_id
-            }));
-        }
-
         function restoreStoredInput() {
             const stored = loadStoredInput();
             if (!stored || !stored.assets) return;
-
-            setValue('name', stored.name);
-            setValue('age', stored.age);
-            setValue('monthly_income', stored.monthly_income);
-            setValue('monthly_expense', stored.monthly_expense);
-            setValue('loan_balance', stored.loan_balance);
-            setValue('monthly_loan_interest', stored.monthly_loan_interest ?? stored.loan_interest_rate);
-            setValue('family_count', stored.family_count);
-            setValue('family_ages', stored.family_ages);
-            setValue('retirement_goal', stored.retirement_goal);
-            setValue('risk_tolerance', stored.risk_tolerance);
-
+            ['name','age','gender','residence_region','job_category','annual_income','monthly_income','monthly_expense','loan_balance','monthly_loan_interest','family_count','family_ages','real_estate_type','real_estate_count','real_estate_market_value','short_term_goal','mid_term_goal','long_term_goal','retirement_goal','risk_tolerance'].forEach((key) => setValue(key, stored[key]));
             const byType = Object.fromEntries(stored.assets.map((asset) => [asset.asset_type, asset.current_value]));
-            setValue('real_estate', byType.real_estate);
-            setValue('deposit', byType.deposit);
-            setValue('stock', byType.stock);
-            setValue('gold_silver', byType.gold_silver);
-            setValue('crypto_asset', byType.crypto_asset ?? byType.pension);
+            ['deposit','installment_savings','stock','fund','pension_insurance','gold_silver','crypto_asset','other_assets'].forEach((key) => setValue(key, byType[key]));
+            setValue('real_estate_market_value', stored.real_estate_market_value ?? byType.real_estate);
         }
 
         restoreStoredInput();
-
         setSavedUi(Boolean(loadStoredInput().assets));
-
-        editButton.addEventListener('click', () => {
-            setSavedUi(false);
-            resultCard.style.display = 'none';
-        });
-
+        editButton.addEventListener('click', () => { setSavedUi(false); resultCard.style.display = 'none'; });
         saveButton.addEventListener('click', () => {
             const payload = validateAndBuildPayload();
             if (!payload) return;
-
             saveStoredInput(payload, payload.user_id);
             setSavedUi(true);
         });
@@ -354,39 +204,33 @@
             event.preventDefault();
             const payload = validateAndBuildPayload();
             if (!payload) return;
-
-            const response = await fetch('/api/v1/users/analysis-input', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify(payload)
-            });
+            const response = await fetch('/api/v1/users/analysis-input', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(payload) });
             const report = await response.json();
-
             if (!response.ok) {
                 resultBody.textContent = report.detail || '분석에 실패했습니다.';
                 resultCard.style.display = 'block';
                 resultCard.scrollIntoView({behavior: 'smooth', block: 'start'});
                 return;
             }
-
             saveStoredInput(payload, report.user_id);
-
             const summary = report.summary;
             const analysis = report.analysis_report;
-            const simulation = report.simulation;
-            const breakdown = Object.entries(summary.asset_breakdown).map(([label, item]) => `<li>${label}: ${won(item.value)} (${pct(item.ratio)})</li>`).join('');
+            const breakdown = Object.entries(summary.asset_breakdown).map(([label, item]) => `<li>${label}: ${money(item.value)} (${pct(item.ratio)})</li>`).join('');
             const risks = analysis.risk_flags.map((item) => `<li>${item}</li>`).join('');
             const plan = report.recommendation.action_plan.map((item) => `<li>${item}</li>`).join('');
             resultBody.innerHTML = `
                 <p><b>${analysis.headline}</b></p>
+                <p><b>진행 흐름</b>: ${report.pipeline.join(' → ')}</p>
                 <p><b>상태</b>: ${analysis.status} / 건전성 ${summary.health_score}/100</p>
+                <p>${analysis.life_stage_comment}</p>
+                <p>${analysis.region_comment}</p>
                 <p>${analysis.asset_comment}</p>
                 <ul class="report-list">${breakdown}</ul>
                 <p>${analysis.cashflow_comment}</p>
                 <p>${analysis.debt_comment}</p>
                 <p><b>가족</b>: ${analysis.family_comment}</p>
                 <p><b>은퇴목표</b>: ${analysis.retirement_goal_comment}</p>
-                <p><b>30년 자산 생존확률</b>: ${pct(simulation.survival_probability)}</p>
+                <p><b>30년 자산 생존확률</b>: ${pct(report.simulation.survival_probability)}</p>
                 <p style="margin-top: 10px;"><b>위험 체크</b></p>
                 <ul class="report-list">${risks}</ul>
                 <p><b>실행 제안</b></p>

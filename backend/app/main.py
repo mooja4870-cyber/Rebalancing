@@ -45,13 +45,25 @@ def _estimate_life_stage(age: int) -> str:
         return "retirement_transition"
     return "retirement"
 
+def _region_code_from_name(region_name: str, fallback: str = "1168000000") -> str:
+    region_map = {
+        "강남구": "1168000000",
+        "서울 강남구": "1168000000",
+        "대구 수성구": "2726000000",
+        "대구_수성구": "2726000000",
+        "세종시": "3611000000",
+        "세종": "3611000000"
+    }
+    return region_map.get((region_name or "").strip(), fallback)
+
 def _asset_rows_to_dicts(assets):
     return [
         {
             "asset_type": a.asset_type,
             "current_value": a.current_value,
             "debt_amount": a.debt_amount or 0,
-            "debt_interest_rate": a.debt_interest_rate or 0
+            "debt_interest_rate": a.debt_interest_rate or 0,
+            "monthly_loan_interest": a.debt_interest_rate or 0
         } for a in assets
     ]
 
@@ -115,13 +127,16 @@ def save_analysis_input(payload: schemas.AnalysisInputRequest, db: Session = Dep
         db.add(user)
     else:
         user.name = payload.name
+    user.gender = payload.gender
 
     profile = db.query(models.UserProfile).filter(models.UserProfile.user_id == uid).first()
     if not profile:
-        profile = models.UserProfile(user_id=uid, region_code=payload.region_code)
+        profile = models.UserProfile(user_id=uid, region_code=_region_code_from_name(payload.residence_region, payload.region_code))
         db.add(profile)
-    profile.region_code = payload.region_code
-    profile.annual_income = payload.monthly_income * 12
+    profile.region_code = _region_code_from_name(payload.residence_region, payload.region_code)
+    profile.job_category = payload.job_category
+    profile.annual_income = payload.annual_income or payload.monthly_income * 12
+    profile.family_type = f"{payload.family_count}명"
     profile.life_stage = _estimate_life_stage(payload.age)
     profile.risk_tolerance = payload.risk_tolerance
 
@@ -162,7 +177,7 @@ def save_analysis_input(payload: schemas.AnalysisInputRequest, db: Session = Dep
     engine = RebalancingEngine(uid, db, {
         "life_stage": _estimate_life_stage(payload.age),
         "risk_tolerance": payload.risk_tolerance,
-        "region_code": payload.region_code
+        "region_code": _region_code_from_name(payload.residence_region, payload.region_code)
     })
     current_assets = _asset_rows_to_dicts(db.query(models.UserAsset).filter(models.UserAsset.user_id == uid).all())
     report = engine.generate_report(
@@ -171,7 +186,21 @@ def save_analysis_input(payload: schemas.AnalysisInputRequest, db: Session = Dep
         payload.monthly_expense,
         payload.family_count,
         payload.family_ages,
-        payload.retirement_goal
+        payload.retirement_goal,
+        {
+            "age": payload.age,
+            "gender": payload.gender,
+            "residence_region": payload.residence_region,
+            "job_category": payload.job_category,
+            "annual_income": payload.annual_income or payload.monthly_income * 12,
+            "real_estate_type": payload.real_estate_type,
+            "real_estate_count": payload.real_estate_count,
+            "real_estate_market_value": payload.real_estate_market_value,
+            "monthly_loan_interest": payload.monthly_loan_interest,
+            "short_term_goal": payload.short_term_goal,
+            "mid_term_goal": payload.mid_term_goal,
+            "long_term_goal": payload.long_term_goal
+        }
     )
     report["source"] = "user_input"
     report["user_id"] = uid

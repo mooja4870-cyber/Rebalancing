@@ -60,12 +60,22 @@ def run_input_analysis_flow():
     payload = {
         "name": "Harness User",
         "age": 60,
+        "gender": "male",
+        "residence_region": "강남구",
+        "job_category": "retired",
+        "annual_income": 48000000,
         "monthly_income": 4000000,
         "monthly_expense": 3200000,
         "loan_balance": 300000000,
         "monthly_loan_interest": 1125000,
         "family_count": 3,
         "family_ages": [60, 58, 28],
+        "real_estate_type": "apartment",
+        "real_estate_count": 1,
+        "real_estate_market_value": 1600000000,
+        "short_term_goal": "reduce interest burden",
+        "mid_term_goal": "rebalance assets",
+        "long_term_goal": "stable retirement income",
         "retirement_goal": "monthly cashflow 4m KRW",
         "risk_tolerance": 5,
         "financial_goal": "retirement cashflow",
@@ -122,6 +132,15 @@ def run_input_analysis_flow():
             return False
         if "analysis_report" not in data:
             print("  - Analysis Report: [FAIL]")
+            return False
+        if "life_stage_profile" not in data:
+            print("  - Life Stage Profile: [FAIL]")
+            return False
+        if "region_analysis" not in data:
+            print("  - Region Mapping: [FAIL]")
+            return False
+        if "pipeline" not in data or "지역 특성 매핑" not in data["pipeline"]:
+            print("  - Cogui Pipeline: [FAIL]")
             return False
         if "simulation" not in data:
             print("  - Simulation Result: [FAIL]")
