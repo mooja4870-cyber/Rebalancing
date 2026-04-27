@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 추천 - 자산균형</title>
+    <link rel="stylesheet" href="css/index.css">
+</head>
+<body>
+    <div class="app-container">
+        <header>
+            <div style="display: flex; align-items: center; gap: 12px; padding: 20px 0;">
+                <span style="font-size: 24px; cursor: pointer;" onclick="location.href='index.html'">←</span>
+                <h1 style="font-size: 20px;">AI 맞춤 추천</h1>
+            </div>
+        </header>
+
+        <!-- 추천 요약 -->
+        <div class="glass-card" style="background: linear-gradient(135deg, #10B981 0%, #059669 100%); color: white;">
+            <p style="font-size: 14px; opacity: 0.9;">🎯 최적 자산 전략</p>
+            <h2 style="margin: 10px 0;">부동산 비중 축소 및<br>인컴형 자산 확대</h2>
+        </div>
+
+        <!-- 실행 액션 플랜 -->
+        <div class="glass-card">
+            <h3 style="margin-bottom: 20px; font-size: 16px;">✅ 6개월 실행 로드맵</h3>
+            <div style="display: flex; flex-direction: column; gap: 20px;">
+                <div style="display: flex; gap: 15px;">
+                    <div style="min-width: 40px; height: 40px; background: #EEF2FF; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--primary); font-weight: 800;">1</div>
+                    <div>
+                        <p style="font-weight: 700; font-size: 14px;">부동산 일부 매각 진행</p>
+                        <p style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">강남구 아파트 매물 등록 (목표가 16.2억)</p>
+                    </div>
+                </div>
+                <div style="display: flex; gap: 15px;">
+                    <div style="min-width: 40px; height: 40px; background: #EEF2FF; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--primary); font-weight: 800;">2</div>
+                    <div>
+                        <p style="font-weight: 700; font-size: 14px;">고금리 대출(5.8%) 상환</p>
+                        <p style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">상가주택 대출 2억원 즉시 상환</p>
+                    </div>
+                </div>
+                <div style="display: flex; gap: 15px;">
+                    <div style="min-width: 40px; height: 40px; background: #EEF2FF; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--primary); font-weight: 800;">3</div>
+                    <div>
+                        <p style="font-weight: 700; font-size: 14px;">월배당 ETF 및 채권 매수</p>
+                        <p style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">매월 500만원 분할 투자 (IRP 활용)</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 시뮬레이션 결과 -->
+        <div class="glass-card">
+            <h3 style="margin-bottom: 15px; font-size: 15px;">📈 추천 전략 적용 시 30년 후</h3>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-size: 14px; color: var(--text-muted);">자산 생존 확률</span>
+                <span style="font-size: 20px; font-weight: 800; color: var(--secondary);">89.2% ✅</span>
+            </div>
+            <div class="progress-track" style="background: #ECFDF5;">
+                <div class="progress-fill" style="width: 89%; background: var(--secondary);"></div>
+            </div>
+        </div>
+
+        <nav class="nav-bar">
+            <div class="nav-item" onclick="location.href='index.html'">🏠 <span>홈</span></div>
+            <div class="nav-item" onclick="location.href='analysis.html'">📊 <span>분석</span></div>
+            <div class="nav-item active" onclick="location.href='recommendation.html'">🎯 <span>추천</span></div>
+            <div class="nav-item" onclick="location.href='region.html'">🗺 <span>지역</span></div>
+            <div class="nav-item" onclick="location.href='settings.html'">👤 <span>MY</span></div>
+        </nav>
+    </div>
+</body>
+</html>

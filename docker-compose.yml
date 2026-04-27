@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  # 데이터베이스 (PostgreSQL)
+  db:
+    image: postgres:16
+    container_name: ab_postgres
+    restart: always
+    environment:
+      POSTGRES_DB: asset_balance
+      POSTGRES_USER: ab_admin
+      POSTGRES_PASSWORD: secure_password_2026
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./infrastructure/db/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - pgdata:/var/lib/postgresql/data
+
+  # 캐시 서버 (Redis) - 오케스트레이션 및 성능 최적화용
+  cache:
+    image: redis:7-alpine
+    container_name: ab_redis
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redisdata:/data
+
+volumes:
+  pgdata:
+  redisdata:

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>설정 - 자산균형</title>
+    <link rel="stylesheet" href="css/index.css">
+</head>
+<body>
+    <div class="app-container">
+        <header>
+            <div style="display: flex; align-items: center; gap: 12px; padding: 20px 0;">
+                <span style="font-size: 24px; cursor: pointer;" onclick="location.href='index.html'">←</span>
+                <h1 style="font-size: 20px;">설정 및 관리</h1>
+            </div>
+        </header>
+
+        <div class="glass-card">
+            <h3 style="font-size: 14px; color: var(--text-muted); margin-bottom: 20px;">👤 내 계정</h3>
+            <div style="display: flex; flex-direction: column; gap: 20px;">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span>프로필 수정</span>
+                    <span style="color: var(--text-muted);">❯</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span>알림 설정</span>
+                    <span style="color: var(--secondary); font-weight: 600;">ON</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="glass-card">
+            <h3 style="font-size: 14px; color: var(--text-muted); margin-bottom: 20px;">🛡 보안</h3>
+            <div style="display: flex; flex-direction: column; gap: 20px;">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span>비밀번호 변경</span>
+                    <span style="color: var(--text-muted);">❯</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span>생체 인증 사용</span>
+                    <span style="color: var(--text-muted);">❯</span>
+                </div>
+            </div>
+        </div>
+
+        <div style="padding: 20px; text-align: center;">
+            <p style="color: var(--danger); cursor: pointer; font-size: 14px; font-weight: 600;">로그아웃</p>
+            <p style="color: #cbd5e1; font-size: 12px; margin-top: 10px;">버전 1.0.2 (최신버전)</p>
+        </div>
+
+        <nav class="nav-bar">
+            <div class="nav-item" onclick="location.href='index.html'">🏠 <span>홈</span></div>
+            <div class="nav-item" onclick="location.href='analysis.html'">📊 <span>분석</span></div>
+            <div class="nav-item" onclick="location.href='recommendation.html'">🎯 <span>추천</span></div>
+            <div class="nav-item" onclick="location.href='region.html'">🗺 <span>지역</span></div>
+            <div class="nav-item active" onclick="location.href='settings.html'">👤 <span>MY</span></div>
+        </nav>
+    </div>
+</body>
+</html>

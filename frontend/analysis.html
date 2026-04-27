@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>지역 분석 - 자산균형</title>
+    <link rel="stylesheet" href="css/index.css">
+</head>
+<body>
+    <div class="app-container">
+        <header>
+            <div style="display: flex; align-items: center; gap: 12px; padding: 20px 0;">
+                <span style="font-size: 24px; cursor: pointer;" onclick="location.href='index.html'">←</span>
+                <h1 style="font-size: 20px;">지역 분석 리포트</h1>
+            </div>
+        </header>
+
+        <!-- 전국 부동산 히트맵 (시뮬레이션) -->
+        <div class="glass-card" style="text-align: center;">
+            <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 16px;">🗺 전국 부동산 히트맵</p>
+            <div style="background: #f1f5f9; border-radius: 16px; padding: 30px; position: relative; height: 250px; display: flex; align-items: center; justify-content: center; font-weight: 800; color: #cbd5e1; font-size: 40px;">
+                지도 영역
+                <div style="position: absolute; top: 20%; left: 30%; width: 20px; height: 20px; background: var(--danger); border-radius: 50%; box-shadow: 0 0 15px var(--danger);"></div>
+                <div style="position: absolute; bottom: 30%; right: 25%; width: 25px; height: 25px; background: var(--secondary); border-radius: 50%; box-shadow: 0 0 15px var(--secondary);"></div>
+            </div>
+            <div style="display: flex; justify-content: center; gap: 15px; margin-top: 15px; font-size: 12px;">
+                <span>🔴 하락세</span> <span>🟡 보합</span> <span>🟢 상승세</span>
+            </div>
+        </div>
+
+        <!-- 지역 상세 리포트 -->
+        <div class="glass-card">
+            <h3 style="margin-bottom: 15px;">📍 서울 강남구</h3>
+            <div style="display: flex; flex-direction: column; gap: 12px;">
+                <div style="display: flex; justify-content: space-between;">
+                    <span style="color: var(--text-muted);">변동률(1년)</span>
+                    <span style="color: var(--danger); font-weight: 700;">▼ -8.3%</span>
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                    <span style="color: var(--text-muted);">전세가율</span>
+                    <span>38.6%</span>
+                </div>
+                <hr style="border: 0; border-top: 1px solid #f1f5f9;">
+                <p style="font-size: 13px; color: var(--text-muted); line-height: 1.6;">
+                    🎯 <b>AI 투자의견: 선별적 접근</b><br>
+                    고가 주택 위주로 하락세가 지속되고 있으며, 전세가율이 낮아 레버리지 활용 시 주의가 필요합니다.
+                </p>
+            </div>
+        </div>
+
+        <nav class="nav-bar">
+            <div class="nav-item" onclick="location.href='index.html'">🏠 <span>홈</span></div>
+            <div class="nav-item active" onclick="location.href='analysis.html'">📊 <span>분석</span></div>
+            <div class="nav-item" onclick="location.href='recommendation.html'">🎯 <span>추천</span></div>
+            <div class="nav-item" onclick="location.href='region.html'">🗺 <span>지역</span></div>
+            <div class="nav-item" onclick="location.href='settings.html'">👤 <span>MY</span></div>
+        </nav>
+    </div>
+</body>
+</html>
