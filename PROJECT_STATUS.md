@@ -1,6 +1,6 @@
 # PROJECT_STATUS
 
-Last updated: 2026-04-27 10:43:55
+Last updated: 2026-04-27 10:48:41
 
 ## Current State
 
@@ -13,6 +13,7 @@ Last updated: 2026-04-27 10:43:55
 - Numeric display format is `#,###,###.#` for money/percent report values and money input defaults.
 - Asset input bottom navigation has been removed.
 - Asset input page title is `자산/가족/수입/지출 현황`.
+- Asset input page now shows `수정` and `저장` at the bottom first; `분석보고서 만들기` appears only after saving the form state.
 - Current local server is running on `http://localhost:8000/`.
 - Verification passed with `python backend/tests/system_audit.py`.
 

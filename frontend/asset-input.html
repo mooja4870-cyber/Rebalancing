@@ -75,6 +75,31 @@
             margin: 8px 0 8px 18px;
         }
 
+        .button-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .secondary-button {
+            border: 1px solid #CBD5E1;
+            background: white;
+            color: var(--text-main);
+            padding: 15px;
+            border-radius: 12px;
+            font-weight: 800;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        .save-status {
+            display: none;
+            font-size: 12px;
+            color: var(--secondary);
+            font-weight: 700;
+            text-align: center;
+        }
+
     </style>
 </head>
 <body>
@@ -156,7 +181,12 @@
                 <input id="crypto_asset" name="crypto_asset" inputmode="decimal" value="180,000,000.0" required>
             </div>
 
-            <button class="submit-button" type="submit">분석보고서 만들기</button>
+            <div class="button-row">
+                <button id="editButton" class="secondary-button" type="button">수정</button>
+                <button id="saveButton" class="submit-button" type="button">저장</button>
+            </div>
+            <p id="saveStatus" class="save-status">저장되었습니다. 이제 분석보고서를 만들 수 있습니다.</p>
+            <button id="analysisButton" class="submit-button" type="submit" style="display: none;">분석보고서 만들기</button>
         </form>
 
         <div id="resultCard" class="glass-card" style="display: none; margin-bottom: 120px;">
@@ -170,6 +200,10 @@
         const form = document.getElementById('assetForm');
         const resultCard = document.getElementById('resultCard');
         const resultBody = document.getElementById('resultBody');
+        const editButton = document.getElementById('editButton');
+        const saveButton = document.getElementById('saveButton');
+        const saveStatus = document.getElementById('saveStatus');
+        const analysisButton = document.getElementById('analysisButton');
         const STORAGE_KEY = 'asset-balance:last-analysis-input';
 
         const decimalFormatter = new Intl.NumberFormat('en-US', {
@@ -237,6 +271,30 @@
             };
         }
 
+        function validateAndBuildPayload() {
+            const data = new FormData(form);
+            const familyAges = agesOf(data.get('family_ages'));
+            const familyCount = numberOf(data, 'family_count');
+
+            if (!form.reportValidity()) {
+                return null;
+            }
+
+            if (familyAges.length !== familyCount) {
+                resultBody.textContent = `가족수는 ${familyCount}명인데 가족 나이는 ${familyAges.length}개입니다. 가족 나이를 가족수만큼 입력해 주세요.`;
+                resultCard.style.display = 'block';
+                resultCard.scrollIntoView({behavior: 'smooth', block: 'start'});
+                return null;
+            }
+
+            return buildPayload(data, familyAges, familyCount);
+        }
+
+        function setSavedUi(isSaved) {
+            saveStatus.style.display = isSaved ? 'block' : 'none';
+            analysisButton.style.display = isSaved ? 'block' : 'none';
+        }
+
         function loadStoredInput() {
             try {
                 return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
@@ -277,20 +335,25 @@
 
         restoreStoredInput();
 
+        setSavedUi(Boolean(loadStoredInput().assets));
+
+        editButton.addEventListener('click', () => {
+            setSavedUi(false);
+            resultCard.style.display = 'none';
+        });
+
+        saveButton.addEventListener('click', () => {
+            const payload = validateAndBuildPayload();
+            if (!payload) return;
+
+            saveStoredInput(payload, payload.user_id);
+            setSavedUi(true);
+        });
+
         form.addEventListener('submit', async (event) => {
             event.preventDefault();
-            const data = new FormData(form);
-            const familyAges = agesOf(data.get('family_ages'));
-            const familyCount = numberOf(data, 'family_count');
-
-            if (familyAges.length !== familyCount) {
-                resultBody.textContent = `가족수는 ${familyCount}명인데 가족 나이는 ${familyAges.length}개입니다. 가족 나이를 가족수만큼 입력해 주세요.`;
-                resultCard.style.display = 'block';
-                resultCard.scrollIntoView({behavior: 'smooth', block: 'start'});
-                return;
-            }
-
-            const payload = buildPayload(data, familyAges, familyCount);
+            const payload = validateAndBuildPayload();
+            if (!payload) return;
 
             const response = await fetch('/api/v1/users/analysis-input', {
                 method: 'POST',
