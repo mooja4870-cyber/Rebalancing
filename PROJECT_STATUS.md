@@ -1,6 +1,6 @@
 # PROJECT_STATUS
 
-Last updated: 2026-04-27 10:25:02
+Last updated: 2026-04-27 10:27:57
 
 ## Current State
 
@@ -15,6 +15,7 @@ Last updated: 2026-04-27 10:25:02
 - Analysis API now returns an `analysis_report` with asset, cashflow, debt, family, retirement goal, risk flags, simulation, and action plan sections.
 - Asset input UX fixed: every required field has a visible label, helper text where needed, required markers, mobile-friendly spacing, visible submit button, family age count validation, and auto-scroll to report/errors.
 - Numeric display format updated to `#,###,###.#` for money/percent report values and money input defaults.
+- Asset input bottom navigation simplified to clear text labels only; confusing symbol icons were removed.
 - Current local server is running on `http://localhost:8000/`.
 - Verification passed with `python backend/tests/system_audit.py`.
 
