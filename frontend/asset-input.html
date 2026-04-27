@@ -135,8 +135,8 @@
                 <input id="loan_balance" name="loan_balance" inputmode="decimal" value="300,000,000.0" required>
             </div>
             <div class="field">
-                <label for="loan_interest_rate">대출금리(연 %) <span class="required">*</span></label>
-                <input id="loan_interest_rate" name="loan_interest_rate" type="number" min="0" max="30" step="0.1" value="4.5" required>
+                <label for="monthly_loan_interest">월 대출이자 <span class="required">*</span></label>
+                <input id="monthly_loan_interest" name="monthly_loan_interest" inputmode="decimal" value="1,125,000.0" required>
             </div>
             <div class="field">
                 <label for="risk_tolerance">위험성향(1~10) <span class="required">*</span></label>
@@ -238,7 +238,7 @@
                 monthly_income: numberOf(data, 'monthly_income'),
                 monthly_expense: numberOf(data, 'monthly_expense'),
                 loan_balance: numberOf(data, 'loan_balance'),
-                loan_interest_rate: numberOf(data, 'loan_interest_rate'),
+                monthly_loan_interest: numberOf(data, 'monthly_loan_interest'),
                 family_count: familyCount,
                 family_ages: familyAges,
                 retirement_goal: data.get('retirement_goal'),
@@ -277,7 +277,7 @@
             setValue('monthly_income', stored.monthly_income);
             setValue('monthly_expense', stored.monthly_expense);
             setValue('loan_balance', stored.loan_balance);
-            setValue('loan_interest_rate', stored.loan_interest_rate);
+            setValue('monthly_loan_interest', stored.monthly_loan_interest ?? stored.loan_interest_rate);
             setValue('family_count', stored.family_count);
             setValue('family_ages', stored.family_ages);
             setValue('retirement_goal', stored.retirement_goal);

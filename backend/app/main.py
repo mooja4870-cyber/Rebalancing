@@ -141,7 +141,7 @@ def save_analysis_input(payload: schemas.AnalysisInputRequest, db: Session = Dep
         debt_interest_rate = asset.debt_interest_rate
         if payload.loan_balance and not debt_attached and (asset.asset_type == "real_estate" or index == 0):
             debt_amount = payload.loan_balance
-            debt_interest_rate = payload.loan_interest_rate
+            debt_interest_rate = payload.monthly_loan_interest
             debt_attached = True
         db.add(models.UserAsset(
             user_id=uid,

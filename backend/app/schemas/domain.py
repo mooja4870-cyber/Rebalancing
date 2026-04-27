@@ -46,7 +46,7 @@ class AnalysisInputRequest(BaseModel):
     monthly_income: float = Field(0.0, ge=0)
     monthly_expense: float = Field(0.0, ge=0)
     loan_balance: float = Field(0.0, ge=0)
-    loan_interest_rate: float = Field(0.0, ge=0)
+    monthly_loan_interest: float = Field(0.0, ge=0)
     family_count: int = Field(1, ge=1, le=20)
     family_ages: List[int] = Field(default_factory=list)
     retirement_goal: str = "Stable retirement cashflow"

@@ -63,7 +63,7 @@ def run_input_analysis_flow():
         "monthly_income": 4000000,
         "monthly_expense": 3200000,
         "loan_balance": 300000000,
-        "loan_interest_rate": 4.5,
+        "monthly_loan_interest": 1125000,
         "family_count": 3,
         "family_ages": [60, 58, 28],
         "retirement_goal": "monthly cashflow 4m KRW",

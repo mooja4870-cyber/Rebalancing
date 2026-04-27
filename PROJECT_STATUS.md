@@ -1,6 +1,6 @@
 # PROJECT_STATUS
 
-Last updated: 2026-04-27 10:38:37
+Last updated: 2026-04-27 10:40:14
 
 ## Current State
 
@@ -18,6 +18,7 @@ Last updated: 2026-04-27 10:38:37
 - Asset input bottom navigation simplified to clear text labels only; confusing symbol icons were removed.
 - Asset input form now saves the last submitted payload in browser localStorage and reuses the returned `user_id`, so debugging does not require re-entering all fields after refresh/revisit.
 - Asset input field changed from pension to crypto asset (`crypto_asset`), including report labeling and harness coverage.
+- Loan input changed from annual loan interest rate to monthly loan interest (`monthly_loan_interest`) on the asset input flow.
 - Current local server is running on `http://localhost:8000/`.
 - Verification passed with `python backend/tests/system_audit.py`.
 
