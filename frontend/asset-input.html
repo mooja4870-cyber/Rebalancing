@@ -186,6 +186,7 @@
         const form = document.getElementById('assetForm');
         const resultCard = document.getElementById('resultCard');
         const resultBody = document.getElementById('resultBody');
+        const STORAGE_KEY = 'asset-balance:last-analysis-input';
 
         const decimalFormatter = new Intl.NumberFormat('en-US', {
             minimumFractionDigits: 1,
@@ -218,20 +219,20 @@
             return `${decimalFormatter.format(Number(value || 0))}%`;
         }
 
-        form.addEventListener('submit', async (event) => {
-            event.preventDefault();
-            const data = new FormData(form);
-            const familyAges = agesOf(data.get('family_ages'));
-            const familyCount = numberOf(data, 'family_count');
-
-            if (familyAges.length !== familyCount) {
-                resultBody.textContent = `가족수는 ${familyCount}명인데 가족 나이는 ${familyAges.length}개입니다. 가족 나이를 가족수만큼 입력해 주세요.`;
-                resultCard.style.display = 'block';
-                resultCard.scrollIntoView({behavior: 'smooth', block: 'start'});
+        function setValue(name, value) {
+            const input = form.elements[name];
+            if (!input || value === undefined || value === null) return;
+            if (input.getAttribute('inputmode') === 'decimal') {
+                input.value = decimalFormatter.format(Number(value || 0));
                 return;
             }
+            input.value = Array.isArray(value) ? value.join(',') : value;
+        }
 
-            const payload = {
+        function buildPayload(data, familyAges, familyCount) {
+            const stored = loadStoredInput();
+            return {
+                user_id: stored.user_id || undefined,
                 name: data.get('name'),
                 age: numberOf(data, 'age'),
                 monthly_income: numberOf(data, 'monthly_income'),
@@ -250,6 +251,62 @@
                     {asset_type: 'pension', asset_name: '연금', current_value: numberOf(data, 'pension')}
                 ]
             };
+        }
+
+        function loadStoredInput() {
+            try {
+                return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+            } catch (error) {
+                return {};
+            }
+        }
+
+        function saveStoredInput(payload, userId) {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify({
+                ...payload,
+                user_id: userId || payload.user_id
+            }));
+        }
+
+        function restoreStoredInput() {
+            const stored = loadStoredInput();
+            if (!stored || !stored.assets) return;
+
+            setValue('name', stored.name);
+            setValue('age', stored.age);
+            setValue('monthly_income', stored.monthly_income);
+            setValue('monthly_expense', stored.monthly_expense);
+            setValue('loan_balance', stored.loan_balance);
+            setValue('loan_interest_rate', stored.loan_interest_rate);
+            setValue('family_count', stored.family_count);
+            setValue('family_ages', stored.family_ages);
+            setValue('retirement_goal', stored.retirement_goal);
+            setValue('risk_tolerance', stored.risk_tolerance);
+
+            const byType = Object.fromEntries(stored.assets.map((asset) => [asset.asset_type, asset.current_value]));
+            setValue('real_estate', byType.real_estate);
+            setValue('deposit', byType.deposit);
+            setValue('stock', byType.stock);
+            setValue('gold_silver', byType.gold_silver);
+            setValue('pension', byType.pension);
+        }
+
+        restoreStoredInput();
+
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const data = new FormData(form);
+            const familyAges = agesOf(data.get('family_ages'));
+            const familyCount = numberOf(data, 'family_count');
+
+            if (familyAges.length !== familyCount) {
+                resultBody.textContent = `가족수는 ${familyCount}명인데 가족 나이는 ${familyAges.length}개입니다. 가족 나이를 가족수만큼 입력해 주세요.`;
+                resultCard.style.display = 'block';
+                resultCard.scrollIntoView({behavior: 'smooth', block: 'start'});
+                return;
+            }
+
+            const payload = buildPayload(data, familyAges, familyCount);
 
             const response = await fetch('/api/v1/users/analysis-input', {
                 method: 'POST',
@@ -264,6 +321,8 @@
                 resultCard.scrollIntoView({behavior: 'smooth', block: 'start'});
                 return;
             }
+
+            saveStoredInput(payload, report.user_id);
 
             const summary = report.summary;
             const analysis = report.analysis_report;

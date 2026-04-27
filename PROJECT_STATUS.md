@@ -1,6 +1,6 @@
 # PROJECT_STATUS
 
-Last updated: 2026-04-27 10:27:57
+Last updated: 2026-04-27 10:31:24
 
 ## Current State
 
@@ -16,6 +16,7 @@ Last updated: 2026-04-27 10:27:57
 - Asset input UX fixed: every required field has a visible label, helper text where needed, required markers, mobile-friendly spacing, visible submit button, family age count validation, and auto-scroll to report/errors.
 - Numeric display format updated to `#,###,###.#` for money/percent report values and money input defaults.
 - Asset input bottom navigation simplified to clear text labels only; confusing symbol icons were removed.
+- Asset input form now saves the last submitted payload in browser localStorage and reuses the returned `user_id`, so debugging does not require re-entering all fields after refresh/revisit.
 - Current local server is running on `http://localhost:8000/`.
 - Verification passed with `python backend/tests/system_audit.py`.
 
