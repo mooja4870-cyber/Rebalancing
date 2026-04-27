@@ -1,11 +1,10 @@
 import requests
-import time
 import sys
 
 BASE_URL = "http://localhost:8000"
 
 def run_smoke_test():
-    print("[1/3] Smoke Test: Checking Service Availability...")
+    print("[1/4] Smoke Test: Checking Service Availability...")
     endpoints = ["/", "/health", "/api/v1/recommendations/sample"]
     for ep in endpoints:
         try:
@@ -21,18 +20,16 @@ def run_smoke_test():
     return True
 
 def run_dry_run_logic():
-    print("[2/3] Dry Run: Validating AI Logic (No Side Effects)...")
-    # AI 엔진의 핵심 계산 모듈이 정상 범주의 결과를 내는지 가상 유저 데이터로 테스트
+    print("[2/4] Dry Run: Validating AI Logic (No Side Effects)...")
     test_user_id = "dry-run-test-id"
     try:
-        # 실제 DB 기록 없이 API 호출 결과의 논리적 타당성만 검사
         res = requests.get(f"{BASE_URL}/api/v1/recommendations/{test_user_id}")
         data = res.json()
-        if "summary" in data and "health_score" in data:
-            score = data["summary"]["health_score"]
-            if 0 <= score <= 100:
-                print(f"  - AI Engine Score Calculation: [PASS] (Score: {score})")
-                return True
+        summary = data.get("summary", {})
+        score = summary.get("health_score")
+        if score is not None and 0 <= score <= 100:
+            print(f"  - AI Engine Score Calculation: [PASS] (Score: {score})")
+            return True
         print("  - AI Engine Output Validation: [FAIL]")
         return False
     except Exception as e:
@@ -40,14 +37,12 @@ def run_dry_run_logic():
         return False
 
 def run_e2e_integration():
-    print("[3/3] E2E Test: Full System Integration...")
+    print("[3/4] E2E Test: Full System Integration...")
     try:
-        # 1. 유저 생성
         user_res = requests.post(f"{BASE_URL}/api/v1/users/sample")
         user_id = user_res.json()["user_id"]
         print(f"  - Step 1: User Registration: [PASS] (ID: {user_id})")
         
-        # 2. 분석 및 추천 데이터 생성
         rec_res = requests.get(f"{BASE_URL}/api/v1/recommendations/{user_id}")
         if rec_res.status_code == 200:
             print("  - Step 2: AI Recommendation Pipeline: [PASS]")
@@ -60,6 +55,59 @@ def run_e2e_integration():
         print(f"  - E2E Error: {e}")
         return False
 
+def run_input_analysis_flow():
+    print("[4/4] Input Flow: Saving user assets and running personalized analysis...")
+    payload = {
+        "name": "Harness User",
+        "age": 60,
+        "monthly_income": 4000000,
+        "monthly_expense": 3200000,
+        "risk_tolerance": 5,
+        "financial_goal": "retirement cashflow",
+        "assets": [
+            {
+                "asset_type": "real_estate",
+                "asset_name": "apartment",
+                "current_value": 1600000000,
+                "debt_amount": 300000000,
+                "debt_interest_rate": 4.5
+            },
+            {
+                "asset_type": "finance",
+                "asset_name": "deposit and ETF",
+                "current_value": 200000000,
+                "debt_amount": 0,
+                "debt_interest_rate": 0
+            }
+        ]
+    }
+    try:
+        res = requests.post(f"{BASE_URL}/api/v1/users/analysis-input", json=payload)
+        if res.status_code != 200:
+            print(f"  - Input Analysis API: [FAIL] Status {res.status_code}")
+            return False
+
+        data = res.json()
+        summary = data.get("summary", {})
+        if data.get("source") != "user_input":
+            print("  - Input Analysis Source: [FAIL]")
+            return False
+        if summary.get("monthly_income") != payload["monthly_income"]:
+            print("  - Monthly Income Binding: [FAIL]")
+            return False
+        if summary.get("total_debt") != 300000000:
+            print("  - Debt Binding: [FAIL]")
+            return False
+        if "simulation" not in data:
+            print("  - Simulation Result: [FAIL]")
+            return False
+
+        print("  - Personalized Input Pipeline: [PASS]")
+        return True
+    except Exception as e:
+        print(f"  - Input Flow Error: {e}")
+        return False
+
 if __name__ == "__main__":
     print("="*50)
     print("SYSTEM COMPREHENSIVE AUDIT START")
@@ -68,9 +116,10 @@ if __name__ == "__main__":
     s1 = run_smoke_test()
     s2 = run_dry_run_logic()
     s3 = run_e2e_integration()
+    s4 = run_input_analysis_flow()
     
     print("="*50)
-    if s1 and s2 and s3:
+    if s1 and s2 and s3 and s4:
         print("FINAL RESULT: ALL TESTS PASSED (SUCCESS)")
         sys.exit(0)
     else:

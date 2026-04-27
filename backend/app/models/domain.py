@@ -69,3 +69,13 @@ class UserAsset(Base):
     debt_amount = Column(Float, default=0.0)
     debt_interest_rate = Column(Float)
     updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now())
+
+class UserFinancialSnapshot(Base):
+    __tablename__ = "user_financial_snapshots"
+    snapshot_id = Column(String, primary_key=True, default=lambda: str(uuid.uuid4()))
+    user_id = Column(String, ForeignKey("users.user_id", ondelete="CASCADE"), unique=True)
+    monthly_income = Column(Float, default=0.0)
+    monthly_expense = Column(Float, default=0.0)
+    risk_tolerance = Column(Integer, default=5)
+    financial_goal = Column(String)
+    updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now())

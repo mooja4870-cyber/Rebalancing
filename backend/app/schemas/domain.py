@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, Field
 from typing import Optional, List
 from datetime import date, datetime
 
@@ -34,3 +34,17 @@ class AssetResponse(AssetBase):
     asset_id: str
     class Config:
         orm_mode = True
+
+class AnalysisAssetInput(AssetBase):
+    pass
+
+class AnalysisInputRequest(BaseModel):
+    user_id: Optional[str] = None
+    name: str = "사용자"
+    age: int = Field(40, ge=19, le=100)
+    region_code: str = "1168000000"
+    monthly_income: float = Field(0.0, ge=0)
+    monthly_expense: float = Field(0.0, ge=0)
+    risk_tolerance: int = Field(5, ge=1, le=10)
+    financial_goal: Optional[str] = None
+    assets: List[AnalysisAssetInput]
