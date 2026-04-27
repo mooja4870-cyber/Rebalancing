@@ -162,8 +162,8 @@
                 <input id="gold_silver" name="gold_silver" inputmode="decimal" value="20,000,000.0" required>
             </div>
             <div class="field">
-                <label for="pension">연금 <span class="required">*</span></label>
-                <input id="pension" name="pension" inputmode="decimal" value="180,000,000.0" required>
+                <label for="crypto_asset">가상자산 <span class="required">*</span></label>
+                <input id="crypto_asset" name="crypto_asset" inputmode="decimal" value="180,000,000.0" required>
             </div>
 
             <button class="submit-button" type="submit">분석보고서 만들기</button>
@@ -248,7 +248,7 @@
                     {asset_type: 'deposit', asset_name: '예금', current_value: numberOf(data, 'deposit')},
                     {asset_type: 'stock', asset_name: '주식', current_value: numberOf(data, 'stock')},
                     {asset_type: 'gold_silver', asset_name: '금/은', current_value: numberOf(data, 'gold_silver')},
-                    {asset_type: 'pension', asset_name: '연금', current_value: numberOf(data, 'pension')}
+                    {asset_type: 'crypto_asset', asset_name: '가상자산', current_value: numberOf(data, 'crypto_asset')}
                 ]
             };
         }
@@ -288,7 +288,7 @@
             setValue('deposit', byType.deposit);
             setValue('stock', byType.stock);
             setValue('gold_silver', byType.gold_silver);
-            setValue('pension', byType.pension);
+            setValue('crypto_asset', byType.crypto_asset ?? byType.pension);
         }
 
         restoreStoredInput();

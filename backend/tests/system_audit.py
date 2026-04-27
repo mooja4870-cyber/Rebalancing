@@ -91,8 +91,8 @@ def run_input_analysis_flow():
                 "current_value": 20000000
             },
             {
-                "asset_type": "pension",
-                "asset_name": "pension",
+                "asset_type": "crypto_asset",
+                "asset_name": "crypto asset",
                 "current_value": 180000000
             }
         ]

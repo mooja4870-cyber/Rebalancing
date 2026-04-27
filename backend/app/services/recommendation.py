@@ -74,6 +74,7 @@ class RebalancingEngine:
             "stock": "주식",
             "gold_silver": "금/은",
             "pension": "연금",
+            "crypto_asset": "가상자산",
             "finance": "금융자산",
             "cash": "현금"
         }

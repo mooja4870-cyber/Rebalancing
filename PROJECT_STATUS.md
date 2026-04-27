@@ -1,6 +1,6 @@
 # PROJECT_STATUS
 
-Last updated: 2026-04-27 10:31:24
+Last updated: 2026-04-27 10:38:37
 
 ## Current State
 
@@ -17,6 +17,7 @@ Last updated: 2026-04-27 10:31:24
 - Numeric display format updated to `#,###,###.#` for money/percent report values and money input defaults.
 - Asset input bottom navigation simplified to clear text labels only; confusing symbol icons were removed.
 - Asset input form now saves the last submitted payload in browser localStorage and reuses the returned `user_id`, so debugging does not require re-entering all fields after refresh/revisit.
+- Asset input field changed from pension to crypto asset (`crypto_asset`), including report labeling and harness coverage.
 - Current local server is running on `http://localhost:8000/`.
 - Verification passed with `python backend/tests/system_audit.py`.
 
